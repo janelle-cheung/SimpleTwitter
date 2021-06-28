@@ -24,6 +24,7 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/ivProfileImage"
+        android:textStyle="bold"
         tools:text="rpandey1234" />
 
     <TextView
@@ -35,4 +36,14 @@
         android:layout_marginTop="2dp"
         android:layout_toEndOf="@+id/ivProfileImage"
         tools:text="This is my sample tweet!" />
+
+    <TextView
+        android:id="@+id/tvRelativeTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/tvScreenName"
+        tools:text="5m" />
 </RelativeLayout>
