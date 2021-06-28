@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,14 +20,17 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 
+@Parcel
 public class Tweet {
 
     private static final String TAG = "Tweet";
     private String body;
     private String createdAt;
     private User user;
-
     private String relativeTime;
+
+    // Empty constructor needed by Parceler library
+    public Tweet() {}
 
     public static Tweet fromJson(JSONObject jsonObject) throws JSONException {
         Tweet tweet = new Tweet();
@@ -34,7 +38,6 @@ public class Tweet {
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
         tweet.relativeTime = tweet.calculateRelativeTimeAgo(tweet.createdAt);
-        Log.i("Tweet", tweet.body);
         return tweet;
     }
 
