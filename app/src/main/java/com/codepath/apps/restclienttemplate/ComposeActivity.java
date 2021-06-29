@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
 import org.parceler.Parcels;
@@ -22,6 +23,7 @@ public class ComposeActivity extends AppCompatActivity {
 
     public static final String TAG = "ComposeActivity";
     public static final int MAX_TWEET_LEN = 140;
+    TextInputLayout tilCompose;
     EditText etCompose;
     Button btnTweet;
     TwitterClient client;
@@ -31,6 +33,7 @@ public class ComposeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose);
 
+        tilCompose = findViewById(R.id.tilCompose);
         etCompose = findViewById(R.id.etCompose);
         btnTweet = findViewById(R.id.btnTweet);
         client = TwitterApp.getRestClient(this);
@@ -75,5 +78,8 @@ public class ComposeActivity extends AppCompatActivity {
             }
         });
 
+        // Character counter
+        tilCompose.setCounterEnabled(true);
+        tilCompose.setCounterMaxLength(MAX_TWEET_LEN);
     }
 }
