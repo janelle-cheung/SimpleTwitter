@@ -2,10 +2,6 @@ package com.codepath.apps.restclienttemplate.models;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,10 +10,7 @@ import org.parceler.Parcel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Locale;
 
 @Parcel
@@ -28,16 +21,22 @@ public class Tweet {
     private String createdAt;
     private User user;
     private String relativeTime;
+    private String mediaUrl;
 
     // Empty constructor needed by Parceler library
     public Tweet() {}
 
     public static Tweet fromJson(JSONObject jsonObject) throws JSONException {
         Tweet tweet = new Tweet();
-        tweet.body = jsonObject.getString("text");
+        tweet.body = jsonObject.getString("full_text");
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
         tweet.relativeTime = tweet.calculateRelativeTimeAgo(tweet.createdAt);
+        if (jsonObject.getJSONObject("entities").has("media")) {
+            tweet.mediaUrl = jsonObject.getJSONObject("entities").getJSONArray("media").getJSONObject(0).getString("media_url_https");
+        } else {
+            tweet.mediaUrl = null;
+        }
         return tweet;
     }
 
@@ -102,4 +101,4 @@ public class Tweet {
     public String getRelativeTime() {
         return relativeTime;
     }
-}
+    public String getMediaUrl() { return mediaUrl; }}

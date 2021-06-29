@@ -3,6 +3,7 @@ package com.codepath.apps.restclienttemplate;
 import android.content.Context;
 import android.service.autofill.TextValueSanitizer;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import com.codepath.apps.restclienttemplate.models.Tweet;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder> {
 
@@ -66,6 +69,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         TextView tvBody;
         TextView tvScreenName;
         TextView tvRelativeTime;
+        ImageView ivImageMedia;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
@@ -73,13 +77,25 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvBody = itemView.findViewById(R.id.tvBody);
             tvScreenName = itemView.findViewById(R.id.tvScreenName);
             tvRelativeTime = itemView.findViewById(R.id.tvRelativeTime);
+            ivImageMedia = itemView.findViewById(R.id.ivImageMedia);
         }
 
+        int radius = 30;
+        int margin = 10;
         public void bind(Tweet tweet) {
             tvBody.setText(tweet.getBody());
             tvScreenName.setText(tweet.getUser().screenName);
             tvRelativeTime.setText(tweet.getRelativeTime());
             Glide.with(context).load(tweet.getUser().profileImageUrl).into(ivProfileImage);
+            if (tweet.getMediaUrl() != null) {
+                ivImageMedia.setVisibility(View.VISIBLE);
+                Glide.with(context)
+                        .load(tweet.getMediaUrl())
+                        .transform(new RoundedCornersTransformation(radius, margin))
+                        .into(ivImageMedia);
+            } else {
+                ivImageMedia.setVisibility(View.GONE);
+            }
         }
     }
 
