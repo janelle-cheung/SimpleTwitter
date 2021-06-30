@@ -1,9 +1,6 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
-import android.service.autofill.TextValueSanitizer;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +64,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         ImageView ivProfileImage;
         TextView tvBody;
+        TextView tvName;
         TextView tvScreenName;
         TextView tvRelativeTime;
         ImageView ivImageMedia;
@@ -75,6 +73,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             super(itemView);
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
             tvBody = itemView.findViewById(R.id.tvBody);
+            tvName = itemView.findViewById(R.id.tvName);
             tvScreenName = itemView.findViewById(R.id.tvScreenName);
             tvRelativeTime = itemView.findViewById(R.id.tvRelativeTime);
             ivImageMedia = itemView.findViewById(R.id.ivImageMedia);
@@ -84,8 +83,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         int margin = 10;
         public void bind(Tweet tweet) {
             tvBody.setText(tweet.getBody());
-            tvScreenName.setText(tweet.getUser().screenName);
-            tvRelativeTime.setText(tweet.getRelativeTime());
+            tvName.setText(tweet.getUser().name);
+            tvScreenName.setText(String.format("@%s", tweet.getUser().screenName));
+            tvRelativeTime.setText(String.format("· %s", tweet.getRelativeTime()));
             Glide.with(context).load(tweet.getUser().profileImageUrl).into(ivProfileImage);
             if (tweet.getMediaUrl() != null) {
                 ivImageMedia.setVisibility(View.VISIBLE);

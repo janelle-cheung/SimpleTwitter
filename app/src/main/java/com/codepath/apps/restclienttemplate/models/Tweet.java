@@ -29,7 +29,6 @@ public class Tweet {
 
     public static Tweet fromJson(JSONObject jsonObject) throws JSONException {
         Tweet tweet = new Tweet();
-        Log.i(TAG, jsonObject.toString());
         if (jsonObject.has("full_text")) {
             tweet.body = jsonObject.getString("full_text");
         } else {
