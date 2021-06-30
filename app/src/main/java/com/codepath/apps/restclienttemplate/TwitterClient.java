@@ -48,8 +48,16 @@ public class TwitterClient extends OAuthBaseClient {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		// Can specify query string params directly or through RequestParams.
 		RequestParams params = new RequestParams();
-		params.put("count", 25);
 		params.put("since_id", 1);
+		params.put("tweet_mode", "extended");
+		client.get(apiUrl, params, handler);
+	}
+
+	public void getHomeTimelineExtended(long maxId, JsonHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/home_timeline.json");
+		// Can specify query string params directly or through RequestParams.
+		RequestParams params = new RequestParams();
+		params.put("max_id", maxId);
 		params.put("tweet_mode", "extended");
 		client.get(apiUrl, params, handler);
 	}

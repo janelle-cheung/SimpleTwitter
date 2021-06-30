@@ -22,6 +22,7 @@ public class Tweet {
     protected User user;
     protected String relativeTime;
     protected String mediaUrl;
+    protected long id;
 
     // Empty constructor needed by Parceler library
     public Tweet() {}
@@ -42,6 +43,7 @@ public class Tweet {
         } else {
             tweet.mediaUrl = null;
         }
+        tweet.id = jsonObject.getLong("id");
         return tweet;
     }
 
@@ -106,4 +108,9 @@ public class Tweet {
     public String getRelativeTime() {
         return relativeTime;
     }
-    public String getMediaUrl() { return mediaUrl; }}
+    public String getMediaUrl() { return mediaUrl; }
+
+    public long getId() {
+        return id;
+    }
+}
