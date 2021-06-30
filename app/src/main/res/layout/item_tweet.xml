@@ -40,6 +40,7 @@
         android:layout_marginTop="2dp"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:layout_toRightOf="@+id/ivProfileImage"
+        android:autoLink="all"
         tools:text="This is my sample tweet!" />
 
         <TextView
