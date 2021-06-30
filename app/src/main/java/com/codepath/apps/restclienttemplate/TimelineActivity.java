@@ -37,7 +37,6 @@ public class TimelineActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeContainer;
     TwitterClient client;
     RecyclerView rvTweets;
-    Button btnLogout;
     List<Tweet> tweets;
     TweetsAdapter adapter;
 
@@ -50,7 +49,6 @@ public class TimelineActivity extends AppCompatActivity {
 
         // Find the recycler view and logout button
         rvTweets = findViewById(R.id.rvTweets);
-        btnLogout = findViewById(R.id.btnLogout);
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
 
         // Initialize list of tweets and adapter
@@ -78,14 +76,6 @@ public class TimelineActivity extends AppCompatActivity {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                client.clearAccessToken(); // log out
-                finish(); // navigate backwards to login screen
-            }
-        });
     }
 
     private void populateHomeTimeline() {
@@ -124,6 +114,9 @@ public class TimelineActivity extends AppCompatActivity {
             // navigate to the compose activity
             Intent i = new Intent(this, ComposeActivity.class);
             startActivityForResult(i, REQUEST_CODE);
+        } else if (item.getItemId() == R.id.logout) {
+            client.clearAccessToken(); // log out
+            finish(); // navigate backwards to login screen
         }
         return true;
     }
