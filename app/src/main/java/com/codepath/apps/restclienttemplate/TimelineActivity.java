@@ -39,6 +39,7 @@ public class TimelineActivity extends AppCompatActivity {
     RecyclerView rvTweets;
     List<Tweet> tweets;
     TweetsAdapter adapter;
+    MenuItem miActionProgressItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class TimelineActivity extends AppCompatActivity {
         rvTweets.setLayoutManager(new LinearLayoutManager(this));
         rvTweets.setAdapter(adapter);
         rvTweets.addItemDecoration(new DividerItemDecoration(rvTweets.getContext(), DividerItemDecoration.VERTICAL));
-        populateHomeTimeline();
+        populateHomeTimeline(false);
 
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -67,7 +68,7 @@ public class TimelineActivity extends AppCompatActivity {
                 // Your code to refresh the list here.
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
-                populateHomeTimeline();
+                populateHomeTimeline(true);
                 swipeContainer.setRefreshing(false);
             }
         });
@@ -78,11 +79,12 @@ public class TimelineActivity extends AppCompatActivity {
                 android.R.color.holo_red_light);
     }
 
-    private void populateHomeTimeline() {
+    private void populateHomeTimeline(boolean isRefresh) {
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.i(TAG, "onSuccess");
+                hideProgressBar();
                 JSONArray jsonArray = json.jsonArray;
                 adapter.clear();
                 try {
@@ -96,9 +98,17 @@ public class TimelineActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable e) {
+                hideProgressBar();
                 Log.e(TAG, "onFailure" + response, e);
             }
         });
+        if (isRefresh) showProgressBar();
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -124,6 +134,7 @@ public class TimelineActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            showProgressBar();
             // Get data from intent (tweet)
             Tweet newTweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
             // Update recycler view with the tweet
@@ -131,8 +142,17 @@ public class TimelineActivity extends AppCompatActivity {
             tweets.add(0, newTweet);
             // Update adapter
             adapter.notifyItemInserted(0);
+            hideProgressBar();
             rvTweets.smoothScrollToPosition(0);
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void showProgressBar() {
+        miActionProgressItem.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        miActionProgressItem.setVisible(false);
     }
 }

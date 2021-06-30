@@ -17,6 +17,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.json.JSONException;
 import org.parceler.Parcels;
 
+import java.sql.Time;
+
 import okhttp3.Headers;
 
 public class ComposeActivity extends AppCompatActivity {
@@ -60,7 +62,6 @@ public class ComposeActivity extends AppCompatActivity {
                         Log.i(TAG, "onSuccess to publish tweet");
                         try {
                             Tweet tweet = Tweet.fromJson(json.jsonObject);
-                            Log.i(TAG, "Published tweet says: " + tweet.getBody());
                             Intent i = new Intent();
                             i.putExtra("tweet", Parcels.wrap(tweet) );
                             setResult(RESULT_OK, i);
