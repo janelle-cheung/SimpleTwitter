@@ -16,18 +16,19 @@ import java.util.Locale;
 @Parcel
 public class Tweet {
 
-    private static final String TAG = "Tweet";
-    private String body;
-    private String createdAt;
-    private User user;
-    private String relativeTime;
-    private String mediaUrl;
+    protected static final String TAG = "Tweet";
+    protected String body;
+    protected String createdAt;
+    protected User user;
+    protected String relativeTime;
+    protected String mediaUrl;
 
     // Empty constructor needed by Parceler library
     public Tweet() {}
 
     public static Tweet fromJson(JSONObject jsonObject) throws JSONException {
         Tweet tweet = new Tweet();
+        Log.i(TAG, jsonObject.toString());
         if (jsonObject.has("full_text")) {
             tweet.body = jsonObject.getString("full_text");
         } else {
@@ -52,10 +53,10 @@ public class Tweet {
         return tweets;
     }
 
-    private static final int SECOND_MILLIS = 1000;
-    private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
-    private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
-    private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
+    protected static final int SECOND_MILLIS = 1000;
+    protected static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
+    protected static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
+    protected static final int DAY_MILLIS = 24 * HOUR_MILLIS;
 
     public String calculateRelativeTimeAgo(String rawJsonDate) {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";

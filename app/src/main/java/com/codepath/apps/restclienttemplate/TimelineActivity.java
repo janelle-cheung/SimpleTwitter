@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
@@ -34,23 +35,23 @@ public class TimelineActivity extends AppCompatActivity {
     private static final String TAG = "TimelineActivity";
     private static final int REQUEST_CODE = 20;
 
-    private SwipeRefreshLayout swipeContainer;
     TwitterClient client;
-    RecyclerView rvTweets;
     List<Tweet> tweets;
     TweetsAdapter adapter;
     MenuItem miActionProgressItem;
+    RecyclerView rvTweets;
+    SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timeline);
+        ActivityTimelineBinding binding = ActivityTimelineBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
+        rvTweets = binding.rvTweets;
+        swipeContainer = binding.swipeContainer;
         client = TwitterApp.getRestClient(this);
-
-        // Find the recycler view and logout button
-        rvTweets = findViewById(R.id.rvTweets);
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
 
         // Initialize list of tweets and adapter
         tweets = new ArrayList<>();
@@ -58,7 +59,7 @@ public class TimelineActivity extends AppCompatActivity {
         // Recycler view setup: layout manager and the adapter
         rvTweets.setLayoutManager(new LinearLayoutManager(this));
         rvTweets.setAdapter(adapter);
-        rvTweets.addItemDecoration(new DividerItemDecoration(rvTweets.getContext(), DividerItemDecoration.VERTICAL));
+        rvTweets.addItemDecoration(new DividerItemDecoration(binding.rvTweets.getContext(), DividerItemDecoration.VERTICAL));
         populateHomeTimeline(false);
 
         // Setup refresh listener which triggers new data loading
@@ -79,7 +80,7 @@ public class TimelineActivity extends AppCompatActivity {
                 android.R.color.holo_red_light);
     }
 
-    private void populateHomeTimeline(boolean isRefresh) {
+    protected void populateHomeTimeline(boolean isRefresh) {
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
@@ -88,8 +89,9 @@ public class TimelineActivity extends AppCompatActivity {
                 JSONArray jsonArray = json.jsonArray;
                 adapter.clear();
                 try {
-                    tweets.addAll(Tweet.fromJsonArray(jsonArray));
+                    tweets.addAll(Tweet.fromJsonArray(json.jsonArray));
                     adapter.notifyDataSetChanged();
+                    // max_id = tweets.get(tweets.size() - 1).getId();
                 } catch (JSONException e) {
                     Log.e(TAG, "JSON exception", e);
                     e.printStackTrace();
