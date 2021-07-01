@@ -82,9 +82,7 @@ public class TimelineActivity extends AppCompatActivity {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
+                // Make sure you call swipeContainer.setRefreshing(false) once the network request has completed successfully.
                 populateHomeTimeline(true);
                 swipeContainer.setRefreshing(false);
             }
@@ -104,8 +102,7 @@ public class TimelineActivity extends AppCompatActivity {
                 JSONArray jsonArray = json.jsonArray;
                 adapter.clear();
                 try {
-                    List<Tweet> newTweets = Tweet.fromJsonArray(json.jsonArray);
-                    tweets.addAll(newTweets);
+                    tweets.addAll(Tweet.fromJsonArray(json.jsonArray));
                     adapter.notifyDataSetChanged();
                     maxId = tweets.get(tweets.size() - 1).getId();
                 } catch (JSONException e) {
@@ -175,9 +172,8 @@ public class TimelineActivity extends AppCompatActivity {
                 hideProgressBar();
                 JSONArray jsonArray = json.jsonArray;
                 try {
-                    List<Tweet> newTweets = Tweet.fromJsonArray(json.jsonArray);
-                    tweets.addAll(newTweets);
-                    adapter.notifyItemRangeInserted(tweets.size() - newTweets.size() - 1, 20);
+                    tweets.addAll(Tweet.fromJsonArray(json.jsonArray));
+                    adapter.notifyDataSetChanged();
                     maxId = tweets.get(tweets.size() - 1).getId();
                 } catch (JSONException e) {
                     Log.e(TAG, "JSON exception", e);
