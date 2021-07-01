@@ -32,7 +32,7 @@ import java.util.List;
 
 import okhttp3.Headers;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity implements TweetsAdapter.OnTweetListener  {
 
     private static final String TAG = "TimelineActivity";
     private static final int REQUEST_CODE = 20;
@@ -43,9 +43,8 @@ public class TimelineActivity extends AppCompatActivity {
     MenuItem miActionProgressItem;
     RecyclerView rvTweets;
     SwipeRefreshLayout swipeContainer;
-
-    private long maxId;
     private EndlessRecyclerViewScrollListener scrollListener;
+    private long maxId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +59,7 @@ public class TimelineActivity extends AppCompatActivity {
 
         // Initialize list of tweets and adapter
         tweets = new ArrayList<>();
-        adapter = new TweetsAdapter(this, tweets);
+        adapter = new TweetsAdapter(this, tweets, this);
         // Recycler view setup: layout manager and the adapter
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvTweets.setLayoutManager(linearLayoutManager);
@@ -197,5 +196,14 @@ public class TimelineActivity extends AppCompatActivity {
 
     public void hideProgressBar() {
         miActionProgressItem.setVisible(false);
+    }
+
+    @Override
+    public void onTweetClick(int position) {
+        Toast.makeText(this, "clicked position " + position, Toast.LENGTH_SHORT).show();
+        Tweet clickedTweet = tweets.get(position);
+        Intent i = new Intent(this, TweetDetailsActivity.class);
+        i.putExtra("clicked tweet", Parcels.wrap(clickedTweet));
+        startActivity(i);
     }
 }
