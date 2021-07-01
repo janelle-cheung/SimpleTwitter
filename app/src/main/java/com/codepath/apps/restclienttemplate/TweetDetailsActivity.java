@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.databinding.ActivityTweetDetailsBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
@@ -30,9 +31,10 @@ public class TweetDetailsActivity extends AppCompatActivity {
 
         int radius = 30;
         int margin = 10;
+        int circleRadius = 100;
         Glide.with(this)
                 .load(tweet.getUser().profileImageUrl)
-                .transform(new RoundedCornersTransformation(radius, margin))
+                .transform(new RoundedCorners(circleRadius))
                 .into(binding.ivProfileImage);
         binding.tvName.setText(tweet.getUser().name);
         binding.tvScreenName.setText(tweet.getUser().screenName);

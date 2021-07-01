@@ -200,7 +200,6 @@ public class TimelineActivity extends AppCompatActivity implements TweetsAdapter
 
     @Override
     public void onTweetClick(int position) {
-        Toast.makeText(this, "clicked position " + position, Toast.LENGTH_SHORT).show();
         Tweet clickedTweet = tweets.get(position);
         Intent i = new Intent(this, TweetDetailsActivity.class);
         i.putExtra("clicked tweet", Parcels.wrap(clickedTweet));

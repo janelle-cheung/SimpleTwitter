@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import org.jetbrains.annotations.NotNull;
@@ -87,12 +88,16 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         int radius = 30;
         int margin = 10;
+        int circleRadius = 100;
         public void bind(Tweet tweet) {
             tvBody.setText(tweet.getBody());
             tvName.setText(tweet.getUser().name);
             tvScreenName.setText(String.format("@%s", tweet.getUser().screenName));
             tvRelativeTime.setText(String.format("· %s", tweet.getRelativeTime()));
-            Glide.with(context).load(tweet.getUser().profileImageUrl).into(ivProfileImage);
+            Glide.with(context)
+                    .load(tweet.getUser().profileImageUrl)
+                    .transform(new RoundedCorners(circleRadius))
+                    .into(ivProfileImage);
             if (tweet.getMediaUrl() != null) {
                 ivImageMedia.setVisibility(View.VISIBLE);
                 Glide.with(context)
@@ -106,7 +111,6 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(context, "clicked position " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
             onTweetListener.onTweetClick(getAdapterPosition());
         }
     }
